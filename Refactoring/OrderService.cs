@@ -9,7 +9,7 @@ namespace Refactoring
 {
     public interface IOrderService
     {
-        void PlaceOrder(IList<Item> items);
+        Basket PlaceOrder(IList<Item> items);
     }
 
     public class OrderService : IOrderService
@@ -30,7 +30,7 @@ namespace Refactoring
             _logger = logger;
         }
 
-        public void PlaceOrder(IList<Item> items)
+        public Basket PlaceOrder(IList<Item> items)
         {
             _logger.Log($"Calling method {nameof(PlaceOrder)}");
 
@@ -41,9 +41,11 @@ namespace Refactoring
                     var currentUser = _userService.GetCurrentUser();
                     var orderDate = _clock.Now();
 
-                    var basket = new Basket();
-                    basket.Items = items;
-                    basket.OrderDate = orderDate;
+                    var basket = new Basket
+                    {
+                        Items = items,
+                        OrderDate = orderDate
+                    };
 
                     basket.TotalPrice = basket.Items.Sum(x => x.Price);
                     if (currentUser.IsPremiumUser && orderDate.Day % 2 == 0 && orderDate.Year < 2017)
@@ -56,6 +58,9 @@ namespace Refactoring
                     _auditingService.Audit(currentUser, $"Placed order {basket.Id}");
 
                     transaction.Commit();
+                    _logger.Log($"Called method {nameof(PlaceOrder)}");
+
+                    return basket;
                 }
             }
             catch (Exception exception)
@@ -63,8 +68,6 @@ namespace Refactoring
                 _logger.Log(exception.Message);
                 throw;
             }
-
-            _logger.Log($"Called method {nameof(PlaceOrder)}");
         }
     }
 }
