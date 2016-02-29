@@ -1,0 +1,27 @@
+
+Aufgabe:
+Welche Aufgaben(5/6) übernimmt die Methode UpdateZuweisungsAbrufverfahrenEigenschaften?
+Welche Auswirkungen kann diese Art der Umsetzung haben, wenn dies in jeder Methode so implementiert wird?
+
+- Zu Viele Konstruktorparameter / zu viele Verantwortlichkeiten
+- technische Tätigkeiten:
+	- Datenbankzugriff
+	- Logging
+	- Authorisierung
+	- Exception Handling
+	- Transaction Handling
+	- ...
+
+- Fachlichte Tätigkeiten als Facade:
+ - Siehe Regions
+
+- Keine zentrale Stelle für diese Aspekte:
+	- Aspekte wie Authorisierung, Logging, Exception Handling, Transaction Handling müssen immer wieder pro Methode geschrieben werden.
+	- Ändert sich das Verfahren für einer dieser Aspekte, müssen alle Methoden angepasst werden
+	- In Tests müssen Aspekte gemockt werden, obwohl man eigentlich diese nicht testen möchte
+
+- Testing:
+	- Jedes mal wenn die Klasse MgmtService einen neuen Konstruktorparameter bekommt, müssen alle Tests angepasst werde
+n
+- Man weiß nicht direkt was die Klasse gemacht (niedrige Kohäsion)
+- Regions 
