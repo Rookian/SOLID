@@ -28,7 +28,7 @@ namespace Refactoring.Infrastructure
 
         public TOutput Dispatch<TOutput>(IMessage<TOutput> message)
         {
-            var makeGenericType = typeof (IMessageHandler<,>).MakeGenericType(message.GetType());
+            var makeGenericType = typeof (IMessageHandler<,>).MakeGenericType(message.GetType(), typeof(TOutput));
             dynamic handler = _container.GetInstance(makeGenericType);
             return (TOutput)handler.Handle((dynamic) message);
         }
